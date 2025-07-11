@@ -1,0 +1,114 @@
+    body {
+       font-family: Arial, sans-serif;
+       background: #f0f2f5;
+       margin: 0;
+       padding: 0;
+   }
+
+   .dashboard-container {
+       max-width: 1000px;
+       margin: 2rem auto;
+       background: white;
+       border-radius: 10px;
+       padding: 2rem;
+       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+   }
+
+   .tabs {
+       display: flex;
+       border-bottom: 2px solid #ccc;
+       margin-bottom: 1rem;
+   }
+
+   .tab {
+       padding: 0.75rem 1.5rem;
+       cursor: pointer;
+       border: none;
+       background: none;
+       font-size: 1rem;
+       outline: none;
+       transition: background 0.3s;
+   }
+
+   .tab:hover,
+   .tab.active {
+       background: #4CAF50;
+       color: white;
+   }
+
+   .tab-content {
+       display: none;
+   }
+
+   .tab-content.active {
+       display: block;
+   }
+
+   table {
+       width: 100%;
+       border-collapse: collapse;
+       margin-top: 1rem;
+   }
+
+   table,
+   th,
+   td {
+       border: 1px solid #ccc;
+   }
+
+   th,
+   td {
+       padding: 0.75rem;
+       text-align: left;
+   }
+
+   @media (max-width: 600px) {
+       .tabs {
+           flex-direction: column;
+       }
+   }
+   
+   .add-hr-btn {
+       float: right;
+       margin-bottom: 10px;
+       padding: 5px 10px;
+       background-color: #4CAF50;
+       color: white;
+       border: none;
+       cursor: pointer;
+   }
+
+   .add-hr-form {
+       display: none;
+       border: 1px solid #ccc;
+       padding: 15px;
+       margin-top: 20px;
+       background-color: #f9f9f9;
+       position: relative;
+   }
+
+   .add-hr-form input {
+       display: block;
+       width: 100%;
+       margin-bottom: 10px;
+       padding: 5px;
+   }
+
+   .add-hr-form button[type="submit"] {
+       padding: 5px 10px;
+       background-color: #4CAF50;
+       color: white;
+       border: none;
+       cursor: pointer;
+   }
+
+   .close-btn {
+       position: absolute;
+       top: 5px;
+       right: 10px;
+       background: none;
+       border: none;
+       font-size: 18px;
+       cursor: pointer;
+       color: red;
+   }
