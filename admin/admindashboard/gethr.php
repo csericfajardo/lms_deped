@@ -28,8 +28,8 @@ if (!isset($_GET['employee_number'])) {
     exit();
 }
 
-$employee_number = $conn->real_escape_string($_GET['employee_number']);
-$sql = "SELECT * FROM hr_admin WHERE employee_number = '$employee_number'";
+$employee_number = $conn->real_escape_string($_GET['hremployee_no']);
+$sql = "SELECT * FROM hr_admin WHERE hremployee_no = '$employee_number'";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {

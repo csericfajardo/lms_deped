@@ -27,7 +27,7 @@ if ($conn->connect_error) {
 
 // Insert HR account when form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $employee_number = $_POST['employee_number'];
+    $employee_number = $_POST['hremployee_no'];
     $first_name = $_POST['first_name'];
     $last_name = $_POST['last_name'];
     $address = $_POST['address'];
@@ -35,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
     // Prepared statement for safety
-    $stmt = $conn->prepare("INSERT INTO hr_admin (employee_number, first_name, last_name, address, email, password) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO hr_admin (hremployee_no, first_name, last_name, address, email, password) VALUES (?, ?, ?, ?, ?, ?)");
     $stmt->bind_param("ssssss", $employee_number, $first_name, $last_name, $address, $email, $password);
 
     if ($stmt->execute()) {

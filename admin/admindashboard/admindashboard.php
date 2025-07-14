@@ -26,7 +26,7 @@ if ($conn->connect_error) {
 }
 
 // Retrieve HR Accounts
-$sql = "SELECT employee_number, last_name, first_name, middle_name, email FROM hr_admin";
+$sql = "SELECT hremployee_no, last_name, first_name, middle_name, email FROM hr_admin";
 $result = $conn->query($sql);
 ?>
 
@@ -68,12 +68,12 @@ $result = $conn->query($sql);
         while($row = $result->fetch_assoc()) {
             $full_name = $row["last_name"] . ", " . $row["first_name"] . ", " . $row["middle_name"];
             echo "<tr>";
-            echo "<td>" . htmlspecialchars($row["employee_number"]) . "</td>";
+            echo "<td>" . htmlspecialchars($row["hremployee_no"]) . "</td>";
             echo "<td>" . htmlspecialchars($full_name) . "</td>";
             echo "<td>" . htmlspecialchars($row["email"]) . "</td>";
             echo "<td>";
-            echo "<button onclick=\"editHR('" . $row["employee_number"] . "')\">Edit</button> ";
-            echo "<button onclick=\"deleteHR('" . $row["employee_number"] . "')\">Delete</button>";
+            echo "<button onclick=\"editHR('" . $row["hremployee_no"] . "')\">Edit</button> ";
+            echo "<button onclick=\"deleteHR('" . $row["hremployee_no"] . "')\">Delete</button>";
             echo "</td>";
             echo "</tr>";
         }
@@ -118,7 +118,7 @@ $result = $conn->query($sql);
                 <button class="close-btn" onclick="closeAddHRForm()">×</button>
                 <h4>Add HR Account</h4>
                 <form action="reghr.php" method="POST" onsubmit="return submitHRForm()">
-                    <input type="text" name="employee_number" placeholder="Employee Number" required>
+                    <input type="text" name="hremployee_no" placeholder="Employee Number" required>
                     <input type="text" name="first_name" placeholder="First Name" required>
                     <input type="text" name="middle_name" placeholder="Middle Name" required>
                     <input type="text" name="last_name" placeholder="Last Name" required>
