@@ -102,15 +102,15 @@ $result = $conn->query($sql);
     ">×</button>
     <br>
     
-    <form action="edithr.php" method="POST" onsubmit="return submitEditHRForm()">
-        <input type="hidden" name="employee_number" id="edit_employee_number">
-        <input type="text" name="first_name" id="edit_first_name" placeholder="First Name" required>
-        <input type="text" name="middle_name" id="edit_middle_name" placeholder="Middle Name" required>
-        <input type="text" name="last_name" id="edit_last_name" placeholder="Last Name" required>
-        <input type="text" name="address" id="edit_address" placeholder="Address" required>
-        <input type="email" name="email" id="edit_email" placeholder="Email" required>
-        <button type="submit">Update</button>
-    </form>
+   <form action="edithr.php" method="POST">
+    <input type="hidden" name="hremployee_no" id="edit_hremployee_no">
+    <input type="text" name="first_name" id="edit_first_name" placeholder="First Name" required>
+    <input type="text" name="middle_name" id="edit_middle_name" placeholder="Middle Name" required>
+    <input type="text" name="last_name" id="edit_last_name" placeholder="Last Name" required>
+    <input type="text" name="address" id="edit_address" placeholder="Address" required>
+    <input type="email" name="email" id="edit_email" placeholder="Email" required>
+    <button type="submit">Update</button>
+</form>
 </div>
 
 
@@ -183,21 +183,26 @@ $result = $conn->query($sql);
             document.getElementById('hrAccountsSection').style.display = 'block';
             return true;
         }
-        function deleteHR(employeeNumber) {
+        function deleteHR(hremployeeNumber) {
             if (confirm("Are you sure you want to delete this HR account?")) {
                 // Redirect to deletehr.php with the employee_number as GET parameter
-                window.location.href = "deletehr.php?employee_number=" + employeeNumber;
+                window.location.href = "deletehr.php?hremployee_no=" + hremployeeNumber;
             }
         }
 
-        function editHR(employeeNumber) {
-            // Use AJAX to fetch data for this employee_number
-            var xhr = new XMLHttpRequest();
-            xhr.open("GET", "gethr.php?employee_number=" + employeeNumber, true);
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    var hr = JSON.parse(xhr.responseText);
-                    document.getElementById('edit_employee_number').value = hr.employee_number;
+        function editHR(hremployeeNumber) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "gethr.php?hremployee_no=" + hremployeeNumber, true);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4) {
+            if (xhr.status == 200) {
+                var hr = JSON.parse(xhr.responseText);
+                console.log(hr); // Debugging output
+
+                if (hr.error) {
+                    alert("Error: " + hr.error);
+                } else {
+                    document.getElementById('edit_hremployee_no').value = hr.hremployee_no;
                     document.getElementById('edit_first_name').value = hr.first_name;
                     document.getElementById('edit_middle_name').value = hr.middle_name;
                     document.getElementById('edit_last_name').value = hr.last_name;
@@ -207,9 +212,15 @@ $result = $conn->query($sql);
                     document.getElementById('hrAccountsSection').style.display = 'none';
                     document.getElementById('editHRForm').style.display = 'block';
                 }
-            };
-            xhr.send();
+            } else {
+                alert("AJAX request failed. Status: " + xhr.status);
+            }
         }
+    };
+    xhr.send();
+}
+
+
 
         function closeEditHRForm() {
             document.getElementById('editHRForm').style.display = 'none';

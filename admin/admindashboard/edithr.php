@@ -9,8 +9,8 @@ if (!isset($_SESSION['admin_email'])) {
 
 // DB connection
 $servername = "localhost";
-$username = "root"; // your DB username
-$password = "";     // your DB password
+$username = "root";
+$password = "";
 $dbname = "depedlmsystem";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -20,22 +20,28 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Retrieve posted data
-$employee_number = $conn->real_escape_string($_POST['employee_number']);
-$first_name = $conn->real_escape_string($_POST['first_name']);
-$middle_name = $conn->real_escape_string($_POST['middle_name']);
-$last_name = $conn->real_escape_string($_POST['last_name']);
-$address = $conn->real_escape_string($_POST['address']);
-$email = $conn->real_escape_string($_POST['email']);
+// Retrieve posted data safely
+$hremployee_no = $_POST['hremployee_no'] ?? '';
+$first_name = $_POST['first_name'] ?? '';
+$middle_name = $_POST['middle_name'] ?? '';
+$last_name = $_POST['last_name'] ?? '';
+$address = $_POST['address'] ?? '';
+$email = $_POST['email'] ?? '';
 
-// Update query
-$sql = "UPDATE hr_admin SET first_name='$first_name', middle_name='$middle_name', last_name='$last_name', address='$address', email='$email' WHERE employee_number='$employee_number'";
+// Validate required fields before update
+if ($hremployee_no && $first_name && $middle_name && $last_name && $address && $email) {
+    $stmt = $conn->prepare("UPDATE hr_admin SET first_name=?, middle_name=?, last_name=?, address=?, email=? WHERE hremployee_no=?");
+    $stmt->bind_param("ssssss", $first_name, $middle_name, $last_name, $address, $email, $hremployee_no);
 
-if ($conn->query($sql) === TRUE) {
-    header("Location: dashboard.php");
-    exit();
+    if ($stmt->execute()) {
+        header("Location: admindashboard.php");
+        exit();
+    } else {
+        echo "Error updating record: " . $conn->error;
+    }
+    $stmt->close();
 } else {
-    echo "Error updating record: " . $conn->error;
+    echo "Missing required fields.";
 }
 
 $conn->close();

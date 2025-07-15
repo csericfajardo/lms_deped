@@ -23,13 +23,13 @@ if ($conn->connect_error) {
     exit();
 }
 
-if (!isset($_GET['employee_number'])) {
+if (!isset($_GET['hremployee_no'])) {
     echo json_encode(["error" => "No employee_number provided"]);
     exit();
 }
 
-$employee_number = $conn->real_escape_string($_GET['hremployee_no']);
-$sql = "SELECT * FROM hr_admin WHERE hremployee_no = '$employee_number'";
+$hremployee_no = $conn->real_escape_string($_GET['hremployee_no']);
+$sql = "SELECT * FROM hr_admin WHERE hremployee_no = '$hremployee_no'";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
