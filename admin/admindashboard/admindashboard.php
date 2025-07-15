@@ -184,11 +184,11 @@ $result = $conn->query($sql);
             return true;
         }
         function deleteHR(hremployeeNumber) {
-            if (confirm("Are you sure you want to delete this HR account?")) {
-                // Redirect to deletehr.php with the employee_number as GET parameter
-                window.location.href = "deletehr.php?hremployee_no=" + hremployeeNumber;
-            }
-        }
+    if (confirm("Are you sure you want to delete this HR account?")) {
+        window.location.href = "deletehr.php?hremployee_no=" + encodeURIComponent(hremployeeNumber);
+    }
+}
+
 
         function editHR(hremployeeNumber) {
     var xhr = new XMLHttpRequest();
