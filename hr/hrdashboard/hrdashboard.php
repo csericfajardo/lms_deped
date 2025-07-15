@@ -49,7 +49,12 @@ $form_errors = isset($_SESSION['form_errors']) ? $_SESSION['form_errors'] : [];
 </head>
 <body>
 <div class="dashboard-container">
-    <h2>Welcome, <?php echo $_SESSION['admin_email']; ?></h2>
+   <h2>
+  Welcome, <?php echo $_SESSION['admin_email']; ?>
+  <?php if (isset($_SESSION['hremployee_no'])) { ?>
+    (<span id="loggedEmployeeNo"><?php echo htmlspecialchars($_SESSION['hremployee_no']); ?></span>)
+  <?php } ?>
+</h2>
     <form action="logout.php" method="POST" style="display:inline; float: right;">
         <button type="submit" class="logout-btn">Logout</button>
     </form>
@@ -181,6 +186,33 @@ $form_errors = isset($_SESSION['form_errors']) ? $_SESSION['form_errors'] : [];
     </form>
   </div>
 </div>
+
+<!-- Add Leave Credit Modal -->
+<div id="addLeaveCreditModal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <span class="close" onclick="closeAddLeaveCreditModal()">&times;</span>
+    <h4>Add Leave Credit</h4>
+    <form id="addLeaveCreditForm" action="addleavecredit.php" method="POST">
+  <input type="hidden" name="employee_no" id="add_leave_employee_no">
+  <input name="hremployee_no" id="hremployee_no" value="<?php echo isset($_SESSION['hremployee_no']) ? htmlspecialchars($_SESSION['hremployee_no']) : ''; ?>">
+  
+  <input name="leave_type" id="add_leave_leave_type">
+
+  <label>Leave Count:</label>
+  <input type="number" name="leave_count" min="1" required><br>
+
+  <label>Leave Details:</label>
+  <input type="text" name="leave_details" required><br>
+
+  <label>Leave Expiration:</label>
+  <input type="date" name="leave_expiration" required><br>
+
+  <button type="button" onclick="submitAddLeaveCredit()">Submit</button>
+</form>
+
+  </div>
+</div>
+
 
 <script src="hrdashboard_script.js"></script>
 </body>

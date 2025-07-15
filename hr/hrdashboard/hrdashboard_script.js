@@ -47,11 +47,6 @@ function viewEmployee(employeeNumber) {
         return;
       }
 
-      if (!data.employee) {
-        alert("Employee data not found.");
-        return;
-      }
-
       // Build personal details
       var details = `
         <div style="display:flex;justify-content:space-between;align-items:center;">
@@ -141,19 +136,41 @@ function viewEmployee(employeeNumber) {
 
 function createLeaveBox(type, count, employeeNo, duration = "") {
   let box = `<div class='leave-box'>
-    <strong>${type}:</strong> ${count}`;
+    <table style="width: 100%;">
+      <tr>
+        <!-- Type and duration column -->
+        <td style="width: 20%; vertical-align: top;">
+          <strong>${type}</strong>`;
   if (duration !== "") {
     box += `<br><small>Duration: ${duration}</small>`;
   }
-  box += `<button style="float:right;" onclick="openLeaveModal('${employeeNo}', '${type}')">Apply</button>`;
-  box += "</div>";
+  box += `</td>`;
+
+  // Count column
+  box += `<td style="width: 10%; text-align: center; vertical-align: middle;">
+            ${count}
+          </td>`;
+
+  // + button column (calls openAddLeaveCreditModal)
+  box += `<td style="width: 5%; text-align: center; vertical-align: middle;">
+            <button onclick="openAddLeaveCreditModal('${employeeNo}', '${type}')">+</button>
+          </td>`;
+
+  // Apply button column
+  box += `<td style="width: 65%; text-align: right; vertical-align: middle;">
+            <button onclick="openLeaveModal('${employeeNo}', '${type}')">Apply</button>
+          </td>
+      </tr>
+    </table>
+  </div>`;
+
   return box;
 }
 
-function openLeaveModal(employeeNo, typeOfLeave) {
+function openLeaveModal(employeeNo, leaveType) {
   document.getElementById("modal_employee_no").value = employeeNo;
-  document.getElementById("modal_type_of_leave").value = typeOfLeave;
-  document.getElementById("modal_leave_type_display").innerText = typeOfLeave;
+  document.getElementById("modal_type_of_leave").value = leaveType;
+  document.getElementById("modal_leave_type_display").innerText = leaveType;
   document.getElementById("leaveModal").style.display = "flex";
 }
 
@@ -269,4 +286,52 @@ function submitLeaveApplication() {
     }
   };
   xhr.send(formData);
+}
+
+function submitAddLeaveCredit() {
+  var form = document.getElementById("addLeaveCreditForm");
+
+  // ✅ Validate leave_count input if needed
+  var leaveCountInput = document.getElementById("add_leave_leave_count");
+  if (leaveCountInput && leaveCountInput.value.trim() === "") {
+    alert("Please enter leave count.");
+    leaveCountInput.focus();
+    return;
+  }
+
+  var formData = new FormData(form);
+
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", "addleavecredit.php", true);
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4) {
+      if (xhr.status === 200) {
+        var response = JSON.parse(xhr.responseText);
+        if (response.success) {
+          alert(response.message);
+          closeAddLeaveCreditModal();
+
+          // ✅ Corrected employeeNo retrieval
+          var employeeNo = document.getElementById(
+            "add_leave_employee_no"
+          ).value;
+          viewEmployee(employeeNo);
+        } else {
+          alert("Failed: " + response.message);
+        }
+      } else {
+        alert("Server error. Please try again.");
+      }
+    }
+  };
+  xhr.send(formData);
+}
+
+function openAddLeaveCreditModal(employeeNo, typeOfLeave) {
+  document.getElementById("add_leave_employee_no").value = employeeNo;
+  document.getElementById("add_leave_leave_type").value = typeOfLeave;
+  document.getElementById("addLeaveCreditModal").style.display = "flex";
+}
+function closeAddLeaveCreditModal() {
+  document.getElementById("addLeaveCreditModal").style.display = "none";
 }
